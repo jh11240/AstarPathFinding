@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class PathFinding : MonoBehaviour
     }
     private void Update()
     {
+        if(Input.GetButtonDown("Jump"))
         FindPath(seeker.position, target.position);
     }
     /// <summary>
@@ -22,30 +24,33 @@ public class PathFinding : MonoBehaviour
     /// <param name="targetPos"></param>
     private void FindPath(Vector3 startPos, Vector3 targetPos)
     {
+        Stopwatch sw= new Stopwatch();
+        sw.Start();
         Node startNode = agrid.GetNodeFromWorldPoint(startPos);
         Node targetNode = agrid.GetNodeFromWorldPoint(targetPos);
 
-        List<Node> openSet = new List<Node>();
+        Heap<Node> openSet = new Heap<Node>(agrid.MaxSize);
         HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
 
         while(openSet.Count > 0)
         {
             //open Set에서 fcost가 제일작은 값을 찾아 curNode 에 넣음, fcost가 같을땐 hcost가 더 작은 값을 고름
-            Node curNode = openSet[0];
-            for(int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet[i].fCost< curNode.fCost || (openSet[i].fCost==curNode.fCost && openSet[i].hCost < curNode.hCost))
-                {
-                    curNode = openSet[i];
-                }
-            }
-
-            openSet.Remove(curNode);
+            //Node curNode = openSet[0];
+            //for(int i = 1; i < openSet.Count; i++)
+            //{
+            //    if (openSet[i].fCost< curNode.fCost || (openSet[i].fCost==curNode.fCost && openSet[i].hCost < curNode.hCost))
+            //    {
+            //        curNode = openSet[i];
+            //    }
+            //}
+            Node curNode = openSet.RemoveFirst();
             closedSet.Add(curNode);
 
             if (curNode == targetNode)
             {
+                sw.Stop();
+                UnityEngine.Debug.Log("path found " + sw.ElapsedMilliseconds+"ms");
                 RetracePath(startNode, targetNode) ;
                 return;
             }

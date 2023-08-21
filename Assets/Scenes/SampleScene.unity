@@ -757,6 +757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 849bc57f9713f0243b71555b520c66ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyDisplayPathGizmos: 0
   player: {fileID: 2066402246}
   UnWalkableLayer:
     serializedVersion: 2
