@@ -15,10 +15,10 @@ public class Units : MonoBehaviour
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
-        Debug.Log(pathSuccessful);
         if (pathSuccessful)
         {
             path = newPath;
+            targetIndex = 0;
             StopCoroutine("FollowPath");    
             StartCoroutine("FollowPath");    
         }
