@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Agrid : MonoBehaviour
 {
-    public bool onlyDisplayPathGizmos;
+    public bool displayGridGizmos;
     public GameObject player;
     public LayerMask UnWalkableLayer;
     public Vector2 gridWorldSize;
@@ -16,7 +16,7 @@ public class Agrid : MonoBehaviour
 
     public Vector3 worldBottomLeft;
 
-    private void Start()
+    private void Awake()
     {
         Init();
     }
@@ -83,38 +83,17 @@ public class Agrid : MonoBehaviour
         return grid[x, y];
     }
 
-    public List<Node> path;
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
-        if (onlyDisplayPathGizmos)
-        {
-            if (path != null)
+            if (grid != null && displayGridGizmos)
             {
-                foreach (Node n in path)
-                {
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
-                }
-            }
-        }
-        else
-        {
-            if (grid != null)
-            {
-                Node playerNode = GetNodeFromWorldPoint(player.transform.position);
                 foreach (Node n in grid)
                 {
                     Gizmos.color = (n.walkable) ? Color.green : Color.red;
-                    //if (playerNode == n) Gizmos.color = Color.cyan;
-                    if (path.Contains(n))
-                    {
-                        Gizmos.color = Color.black;
-                    }
                     Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
                 }
             }
-        }
     }
 }
