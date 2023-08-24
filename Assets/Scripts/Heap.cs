@@ -50,7 +50,7 @@ public class Heap<T> where T : IHeapItem<T>
             int rightChildIndex = item.heapIndex * 2 + 2;
             int swapIndex = 0;
 
-            if (leftChildIndex > currentItemCount) break;
+            if (leftChildIndex >= currentItemCount) break;
 
             //자식 중 더 작은 자식노드 찾는 방식
              swapIndex = leftChildIndex;
@@ -83,6 +83,8 @@ public class Heap<T> where T : IHeapItem<T>
                 Swap(item, items[parentIndex]);
                 parentIndex = (item.heapIndex - 1) / 2;
             }
+            else
+                break;
         }
     }
     public void Swap(T itemA, T itemB)
@@ -91,7 +93,7 @@ public class Heap<T> where T : IHeapItem<T>
         items[itemB.heapIndex]= itemA;
         int tmpIndex = itemA.heapIndex;
         itemA.heapIndex = itemB.heapIndex;
-        itemA.heapIndex = tmpIndex;
+        itemB.heapIndex = tmpIndex;
 
     }
 }

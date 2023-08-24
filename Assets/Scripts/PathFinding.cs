@@ -30,20 +30,22 @@ public class PathFinding : MonoBehaviour
         Node targetNode = agrid.GetNodeFromWorldPoint(targetPos);
 
         Heap<Node> openSet = new Heap<Node>(agrid.MaxSize);
+        //List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
 
         while(openSet.Count > 0)
         {
-            //open Set에서 fcost가 제일작은 값을 찾아 curNode 에 넣음, fcost가 같을땐 hcost가 더 작은 값을 고름
+            ////open Set에서 fcost가 제일작은 값을 찾아 curNode 에 넣음, fcost가 같을땐 hcost가 더 작은 값을 고름
             //Node curNode = openSet[0];
-            //for(int i = 1; i < openSet.Count; i++)
+            //for (int i = 1; i < openSet.Count; i++)
             //{
-            //    if (openSet[i].fCost< curNode.fCost || (openSet[i].fCost==curNode.fCost && openSet[i].hCost < curNode.hCost))
+            //    if (openSet[i].fCost < curNode.fCost || (openSet[i].fCost == curNode.fCost && openSet[i].hCost < curNode.hCost))
             //    {
             //        curNode = openSet[i];
             //    }
             //}
+            //openSet.Remove(curNode);
             Node curNode = openSet.RemoveFirst();
             closedSet.Add(curNode);
 
