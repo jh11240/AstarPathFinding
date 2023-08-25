@@ -13,6 +13,9 @@ public class Agrid : MonoBehaviour
     public int gridYCnt;
     public float nodeRadius;
     private float nodeDiameter;
+    public TerrainType[] walkableRegions;
+    private LayerMask walkableMask;
+    private Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
 
     public Vector3 worldBottomLeft;
 
@@ -26,6 +29,11 @@ public class Agrid : MonoBehaviour
         nodeDiameter = nodeRadius * 2;
         gridXCnt = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridYCnt = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
+        foreach(TerrainType terrain in walkableRegions)
+        {
+            walkableMask |= terrain.terrainMask.value;
+            walkableRegionsDictionary.Add((int)Mathf.Log(terrain.terrainMask.value,2), terrain.terrainPenalty);
+        }
         CreateGrid();
     }
     public int MaxSize
@@ -46,7 +54,16 @@ public class Agrid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + (i * nodeDiameter + nodeRadius) * Vector3.right + (j * nodeDiameter + nodeRadius) * Vector3.forward;
                 bool walkable = !Physics.CheckSphere(worldPoint, nodeRadius, UnWalkableLayer);
-                grid[i, j] = new Node(walkable, worldPoint,i,j);
+
+                int movePenalty = 0;
+
+                Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);
+                RaycastHit hit;
+                if(Physics.Raycast(ray, out hit, 100, walkableMask))
+                {
+                    walkableRegionsDictionary.TryGetValue(hit.collider.gameObject.layer, out movePenalty);
+                    grid[i, j] = new Node(walkable, worldPoint,i,j,movePenalty);
+                }
             }
         }
     }
@@ -95,5 +112,11 @@ public class Agrid : MonoBehaviour
                     Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
                 }
             }
+    }
+    [System.Serializable]
+    public class TerrainType
+    {
+        public LayerMask terrainMask;
+        public int terrainPenalty;
     }
 }

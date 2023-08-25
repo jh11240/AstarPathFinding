@@ -71,7 +71,7 @@ public class PathFinding : MonoBehaviour
                     //통과하지 못하거날 이미 처리한 노드라면 contineu
                     if (!elem.walkable || closedSet.Contains(elem)) continue;
 
-                    int newGCost = curNode.gCost + GetDistance(elem, curNode);
+                    int newGCost = curNode.gCost + GetDistance(elem, curNode)+elem.movePenalty;
                     if (newGCost < elem.gCost || !openSet.Contains(elem))
                     {
                         elem.gCost = newGCost;
@@ -82,6 +82,8 @@ public class PathFinding : MonoBehaviour
                         {
                             openSet.Add(elem);
                         }
+                        else
+                            openSet.UpdateItem(elem);
                     }
                 }
             }
