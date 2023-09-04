@@ -169,7 +169,7 @@ public class Agrid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 0, gridWorldSize.y));
 
             if (grid != null && displayGridGizmos)
             {
@@ -177,7 +177,7 @@ public class Agrid : MonoBehaviour
                 {
                     Gizmos.color = Color.Lerp(Color.white, Color.black, Mathf.InverseLerp(penaltyMin, penaltyMax, n.movePenalty));
                     Gizmos.color = (n.walkable) ? Gizmos.color : Color.red;
-                    Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter));
+                    Gizmos.DrawCube(n.worldPosition+Vector3.down*0.5f, Vector3.one * (nodeDiameter));
                 }
             }
     }
