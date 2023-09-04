@@ -9,7 +9,7 @@ public class Path
     public readonly int finishLineIndex;
     public readonly int slowDownIndex;
 
-    public Path(Vector3[] lookPoints,Vector3 startPos , float turnDist,float stoppingDst)
+    public Path(Vector3[] lookPoints, Vector3 startPos , float turnDist, float stoppingDst)
     {
         this.lookPoints = lookPoints;
         turnBoundaries = new Line[lookPoints.Length];

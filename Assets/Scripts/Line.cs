@@ -4,8 +4,10 @@ using UnityEngine;
 
 public struct Line
 {
+    //분모가 0일걸 대비해서 엄청큰 기울기 저장
     const float verticalLineGradient = 1e5f;
 
+    //현재 Line의 기울기
     float gradient;
     //y=ax+b 에서 b를 말하는 부분 y축과 닿아서 y_intercept라고 하나봄
     float y_intercept;
@@ -14,7 +16,9 @@ public struct Line
     Vector2 pointOnLine_1;
     Vector2 pointOnLine_2;
 
+    //인자로 넘어온 pointPerpendicularToLine의 점이 통과하는 선의 기울기
     float gradientPerpendicular;
+    //접근 방향
     bool approachSide;
 
     //점두개로 선분구성하는 함수
@@ -53,6 +57,11 @@ public struct Line
 
     bool GetSide(Vector2 p)
     {
+        //(pointOnLine_2.y- pointOnLine_1.y) / (pointOnLine_2.x- pointOnLine_1.x) >
+        //(p.y - pointOnLine_1.y) / (p.x - pointOnLine_1.x)
+        // pointOnLine2와 pointOnLine1 사이 기울기와 p와 pointOnLine1 사이 기울기를 비교하는 방식이다.
+        //해당 값은 결국 현재 선분의 왼쪽에 위치하냐 오른쪽에 위치하냐를 나타내는 것으로 
+        //두 점의 GetSide값이 같으면 현재 선분 기준으로 같은 쪽에 위치하게된다.
         return (p.x-pointOnLine_1.x) * (pointOnLine_2.y- pointOnLine_1.y) > (p.y - pointOnLine_1.y) * (pointOnLine_2.x- pointOnLine_1.x);
     }
 
