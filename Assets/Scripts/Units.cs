@@ -41,7 +41,7 @@ public class Units : MonoBehaviour
         {
             yield return new WaitForSeconds(.3f);
         }
-        PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
+        PathRequestManager.RequestPath(new PathRequest(transform.position,target.position, OnPathFound));
 
         float sqrMoveThresHold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
         Vector3 targetPosOld = target.position;
@@ -51,8 +51,8 @@ public class Units : MonoBehaviour
             yield return new WaitForSeconds(minPathUpdateTime);
             if((target.position-targetPosOld).magnitude > sqrMoveThresHold)
             {
-                PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-                targetPosOld=target.position;
+                PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
+                targetPosOld = target.position;
             }
         }
     }
@@ -86,7 +86,7 @@ public class Units : MonoBehaviour
                 if (pathIndex >= path.slowDownIndex && stoppingDist > 0)
                 {
                     speedPercent = Mathf.Clamp01(path.turnBoundaries[path.finishLineIndex].DistanceFromPoint(pos2D) / stoppingDist);
-                    //너무 느려져서 해당 점에 도달하기까지 많이 걸릴수 있으므로 적당히 느려지면 컷
+                    //너무 느려져서 해당 점에 도달하기까지 많이 걸릴 수 있으므로 적당히 느려지면 컷
                     if (speedPercent < 0.01f)
                     {
                         followingPath = false;

@@ -6,26 +6,27 @@ using System;
 
 public class PathFinding : MonoBehaviour
 {
-    PathRequestManager requestManager;
+    //PathRequestManager requestManager;
 
     private Agrid agrid;
     private void Awake()
     {
-        requestManager = GetComponent<PathRequestManager>();
+        //requestManager = GetComponent<PathRequestManager>();
         agrid = GetComponent<Agrid>();
     }
 
-    public void StartFindPath(Vector3 startNode, Vector3 endNode)
-    {
-        StartCoroutine(FindPath(startNode,endNode));
-    }
+    
+    //public void StartFindPath(Vector3 startNode, Vector3 endNode)
+    //{
+    //    StartCoroutine(FindPath(startNode,endNode));
+    //}
 
     /// <summary>
     /// startPos에서 targetPos까지 a* 알고리즘을 통해 최적의 경로를 찾아(list<node>형태) retracepath함수를 호출해 agrid클래스에 넘겨줌
     /// </summary>
     /// <param name="startPos"></param>
     /// <param name="targetPos"></param>
-    private IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
+    public  void FindPath(PathRequest request, Action<PathResult> callBack)
     {
         Stopwatch sw= new Stopwatch();
         sw.Start();
@@ -33,8 +34,8 @@ public class PathFinding : MonoBehaviour
         Vector3[] wayPoints=new Vector3[0];
         bool pathSuccess=false;
 
-        Node startNode = agrid.GetNodeFromWorldPoint(startPos);
-        Node targetNode = agrid.GetNodeFromWorldPoint(targetPos);
+        Node startNode = agrid.GetNodeFromWorldPoint(request.pathStart);
+        Node targetNode = agrid.GetNodeFromWorldPoint(request.pathEnd);
 
         if (startNode.walkable && targetNode.walkable)
         {
@@ -88,12 +89,14 @@ public class PathFinding : MonoBehaviour
                 }
             }
         }
-         yield return null;
+        // yield return null;
         if (pathSuccess)
         {
             wayPoints = RetracePath(startNode, targetNode);
+            pathSuccess = wayPoints.Length > 0;
         }
-        requestManager.FinishedProcessingPath(wayPoints, pathSuccess);
+        //requestManager.FinishedProcessingPath(wayPoints, pathSuccess);
+        callBack(new PathResult(wayPoints,pathSuccess,request.callBack));
     }
     /// <summary>
     /// StartNode부터 endNode까지 a* 알고리즘으로 찾은 경로(list<Node>)를 agrid의 path에 넣어준다.
